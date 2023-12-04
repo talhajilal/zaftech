@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'  # Choose the appropriate Linux agent pool and image
 
 variables:
-  vmImageName: 'YourVMImageName'  # Replace with your VM image name
+  vmImageName: 'testimage'  # Replace with your VM image name
   packerTemplatePath: 'packer.json'  # Assuming packer.json is in the root directory
 
 stages:
@@ -30,7 +30,7 @@ stages:
       displayName: 'Install Packer and Validate Template'
     - script: |
         # Build the VM image with Packer
-        #packer build $(Build.SourcesDirectory)/$(packerTemplatePath) -var 'vm_image_name=$(vmImageName)'
+        packer build $(Build.SourcesDirectory)/$(packerTemplatePath) -var 'vm_image_name=$(vmImageName)'
         echo "Hello World"
       displayName: 'Build VM Image'
 
