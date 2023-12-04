@@ -34,8 +34,8 @@ stages:
         echo "Hello World"
       displayName: 'Build VM Image'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: '$(Build.SourcesDirectory)/output-artifacts'  # Replace with your output path
-        artifactName: 'PackerBuildOutput'
-      displayName: 'Publish Build Artifacts'
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #     pathtoPublish: '$(Build.SourcesDirectory)/output-artifacts'  # Replace with your output path
+    #     artifactName: 'PackerBuildOutput'
+    #   displayName: 'Publish Build Artifacts'
