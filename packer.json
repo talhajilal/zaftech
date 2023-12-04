@@ -1,0 +1,35 @@
+{
+  "builders": [
+    {
+      "type": "azure-arm",
+
+      "client_id": "YOUR_AZURE_CLIENT_ID",
+      "client_secret": "YOUR_AZURE_CLIENT_SECRET",
+      "subscription_id": "YOUR_AZURE_SUBSCRIPTION_ID",
+      "tenant_id": "YOUR_AZURE_TENANT_ID",
+
+      "managed_image_resource_group_name": "packer-rg",
+      "managed_image_name": "packer-image",
+
+      "os_type": "Linux",
+      "image_publisher": "Canonical",
+      "image_offer": "UbuntuServer",
+      "image_sku": "18.04-LTS",
+
+      "location": "East US",
+      "vm_size": "Standard_DS2_v2"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get update",
+        "sudo apt-get install -y apache2",
+        "sudo systemctl enable apache2",
+        "sudo systemctl start apache2"
+      ]
+    }
+  ]
+}
