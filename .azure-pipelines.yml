@@ -1,0 +1,45 @@
+# Azure DevOps YAML file for Packer build with Linux image
+
+trigger:
+- main  # Replace with your branch or trigger conditions
+
+pool:
+  vmImage: 'ubuntu-latest'  # Choose the appropriate Linux agent pool and image
+
+variables:
+  vmImageName: 'YourVMImageName'  # Replace with your VM image name
+  packerTemplatePath: 'packer.json'  # Assuming packer.json is in the root directory
+
+stages:
+- stage: Build
+  jobs:
+  - job: PackerBuild
+    displayName: 'Build VM Image with Packer'
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '3.x'
+      displayName: 'Use .NET SDK'
+
+    - script: |
+        # Install Packer
+        curl -o packer.zip https://releases.hashicorp.com/packer/1.7.5/packer_1.7.5_linux_amd64.zip
+        unzip packer.zip
+        chmod +x packer
+        sudo mv packer /usr/local/bin/
+
+        # Validate Packer template
+        packer validate $(Build.SourcesDirectory)/$(packerTemplatePath)
+      displayName: 'Install Packer and Validate Template'
+
+    - script: |
+        # Build the VM image with Packer
+        packer build $(Build.SourcesDirectory)/$(packerTemplatePath) -var 'vm_image_name=$(vmImageName)'
+      displayName: 'Build VM Image'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.SourcesDirectory)/output-artifacts'  # Replace with your output path
+        artifactName: 'PackerBuildOutput'
+      displayName: 'Publish Build Artifacts'
